@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: postgres
+  name: postgres-ss
+  labels:
+    app: postgres
+    comp: postgres
+spec:
+  serviceName: "postgres-svc"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+      comp: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+        comp: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:13
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: username
+            - name: POSTGRES_DB
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-pvc
+              mountPath: /var/lib/postgresql
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-pvc
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "local"
+        resources:
+          requests:
+            storage: 1Gi

@@ -1,0 +1,15 @@
+resources:
+  - statefulset.yaml
+  - service.yaml
+
+namespace: postgres
+commonLabels:
+  app: postgres
+
+generatorOptions:
+  labels:
+    apps: postgres
+
+secretGenerator:
+  - name: postgres-password
+    type: Opaque

@@ -41,7 +41,7 @@ spec:
     - metadata:
         name: postgres-pvc
       spec:
-        accessModes: [ "ReadWriteOnce" ]
+        accessModes: ["ReadWriteOnce"]
         storageClassName: "local"
         resources:
           requests:

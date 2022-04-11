@@ -1,1 +1,1 @@
-# k8s-postgres
+# kustomize-postgres
